@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=², initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <span>
+            <h1>Site</h1>
+        </span>
+        <ul>
+            <li><a href="/">home</a></li>
+            <li><a href="/login">log in</a></li>
+            <li><a href="/sign-up">sign-up</a></li>
+            <li><a href="/logout">log out</a></li>
+        </ul>
+    </nav>
+
+    <!-- display messages -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <article>
+                {{message}}
+            </article>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section>
+    <span>
+        <h1>Welcome</h1>
+        <br>
+        <h3>Login</h3>
+    </span>
+    <form method="post">
+        <input type="email" name="email" autocomplete="off">
+        <br>
+        <input type="password" name="password" autocomplete="off">
+        <br>
+        <input type="submit" name="login" value="login">
+    </form>
+</section>
+{% endblock %}
