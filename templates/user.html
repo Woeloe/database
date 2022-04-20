@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        .media-container{
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: left;
+        }
+    </style>
+</head>
+    <body>
+        <p>Hallo {{naam}}</p>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="image">
+            <input type="submit" value="uploaden" name="upload">
+        </form>
+        <div class="media-container">
+            {% for pic in pics %}
+            <div class="media">
+                <img class="img" src="{{pic}}", width="200px;">
+                <form method="post">
+                    <input type="text" name="url" value="{{pic}}" style="display: none;">
+                    <input type="submit" name="delete" value="X" placeholder="X">
+                </form>
+            </div>
+            
+        {% endfor %}
+        </div>
+
+    </body>
+</html>
