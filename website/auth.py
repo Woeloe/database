@@ -42,6 +42,9 @@ def sign_up():
         email = request.form.get("email")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
+        resident1 = request.form.get("resident1")
+        resident2 = request.form.get("resident2")
+        resident3 = request.form.get("resident3")
 
         usercheck = Users.query.filter_by(email=email).first()
         if usercheck:
@@ -54,7 +57,7 @@ def sign_up():
             flash("Passwords don't match", category="error")
         else:
             #sign up
-            newUser = Users(username=user, email=email, password=generate_password_hash(password1, method="md5"))
+            newUser = Users(username=user, email=email, password=generate_password_hash(password1, method="md5"), resident1=resident1, resident2=resident2, resident3=resident3)
             db.session.add(newUser)
             db.session.commit()
             login_user(newUser, remember=True)

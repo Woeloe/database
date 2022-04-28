@@ -1,6 +1,9 @@
+from turtle import down
 from flask import Blueprint, render_template, redirect, request
-from flask_login import login_required
+from flask_login import current_user, login_required
 from .cloudinary_api import *
+from . import db
+from .models import Users
 
 pages = Blueprint("pages", __name__)
 
@@ -12,17 +15,49 @@ def home():
 @pages.route("/<naam>", methods=["POST", "GET"])
 @login_required
 def account(naam):
-    pics = download(naam)
-    if(request.form.get("upload") == "uploaden"):
+    residents = [current_user.resident1, current_user.resident2, current_user.resident3]
+    picsList = [download(residents[0]), download(residents[1]), download(residents[2])]
+
+    info = zip(residents, picsList)
+
+    if(request.form.get("manageResidents") is not None):
+        return redirect(f"/{naam}/bewoners")
+    
+    if(request.form.get("upload") is not None):
+        resident = request.form.get("upload")
         path = request.files["image"]
-        print(path)
-        print(path.filename)
-        print(path.name)
-        upload(path, naam)
+        upload(path, resident)
         return redirect(f"/{naam}")
     
     if(request.form.get("delete") is not None):
+        resident = request.form.get("delete")
         url = request.form.get("url")
-        delete(url, naam)
+        print(resident)
+        delete(url, resident)
         return redirect(f"/{naam}")
-    return render_template("user.html", naam = naam , pics = pics)
+    return render_template("user.html", naam = naam , info = info)
+
+@pages.route("/<naam>/bewoners", methods=["POST","GET"])
+@login_required
+def manageResidents(naam):
+    residents = [current_user.resident1, current_user.resident2, current_user.resident3]
+    numbers = ["1", "2", "3"]
+    
+    residents = zip(residents, numbers)
+
+    if(request.form.get("save") is not None):
+        resident1 = request.form.get("resident1")
+        resident2 = request.form.get("resident2")
+        resident3 = request.form.get("resident3")
+
+        user_updated = Users.query.filter_by(username=naam).update(dict(resident1 = resident1, resident2 = resident2, resident3 = resident3))
+        db.session.commit()
+
+        residents = [resident1, resident2, resident3]
+        for resident in residents:
+            if(resident != "" and resident != None):
+                createUser(resident)
+
+        return redirect(f"/{naam}")
+
+    return render_template("manageResidents.html", naam=naam, residents=residents)

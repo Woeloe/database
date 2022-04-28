@@ -18,22 +18,28 @@
 </head>
     <body>
         <p>Hallo {{naam}}</p>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="image">
-            <input type="submit" value="uploaden" name="upload">
+        <form method="POST">
+            <button name="manageResidents" value="manage">Beheer bewoners</button>
         </form>
-        <div class="media-container">
-            {% for pic in pics %}
-            <div class="media">
-                <img class="img" src="{{pic}}", width="200px;">
-                <form method="post">
-                    <input type="text" name="url" value="{{pic}}" style="display: none;">
-                    <input type="submit" name="delete" value="X" placeholder="X">
-                </form>
+        {%for resident, pics in info %}
+            <p>{{resident}}</p>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="image">
+                <button type="submit" value="{{resident}}" name="upload">uploaden</button>
+            </form>
+            <div class="media-container">
+                {% for pic in pics %}
+                <div class="media">
+                    <img class="img" src="{{pic}}", width="200px;">
+                    <form method="post">
+                        <input type="text" name="url" value="{{pic}}" style="display: none;">
+                        <button type="submit" name="delete" value="{{resident}}">X</button>
+                    </form>
+                </div>
+                
+            {% endfor %}
             </div>
-            
+            <br>
         {% endfor %}
-        </div>
-
     </body>
 </html>

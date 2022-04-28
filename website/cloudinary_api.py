@@ -44,13 +44,11 @@ def upload(file, name):
 def delete(url, name):
   db_download = db.child(name).get()
   pics = db_download.val()
-  text = url.split("/", 7)[-1].split(".")[0]
+  badURL = url.split("/", 7)[-1].split(".")[0]
   
-  print(text)
-
   pics.remove(url)
   db.child(name).set(pics)
-  cloudinary.uploader.destroy(text)
+  cloudinary.uploader.destroy(badURL)
 
 def download(name):
   download = db.child(name).get()
