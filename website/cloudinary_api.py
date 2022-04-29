@@ -24,7 +24,7 @@ firebaseConfig = {"apiKey": "AIzaSyAZAeWgkHoF4pqCPARjdRR6-xd7_KwwPz4",
   }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
-db = firebase.database()
+firebase_db = firebase.database()
 
 
 
@@ -33,34 +33,43 @@ def upload(file, name):
       folder = "personen/" + name + "/")
   url = response['url']
 
-  download = db.child(name).get()
+  download = firebase_db.child(name).get()
   pics = download.val()
 
   if(pics != None):
-    pics.append(url)
-    db.child(name).set(pics)
+    if(pics != ["x"]):
+      pics.append(url)
+    else:
+      pics = [url]
+    firebase_db.child(name).set(pics)
 
 
 def delete(url, name):
-  db_download = db.child(name).get()
+  db_download = firebase_db.child(name).get()
   pics = db_download.val()
-  badURL = url.split("/", 7)[-1].split(".")[0]
+  badPic = url.split("/", 7)[-1].split(".")[0]
   
-  pics.remove(url)
-  db.child(name).set(pics)
-  cloudinary.uploader.destroy(badURL)
+  if(len(pics) != 1):
+    pics.remove(url)
+  else:
+    pics = ["x"]
+  firebase_db.child(name).set(pics)
+  cloudinary.uploader.destroy(badPic)
 
 def download(name):
-  download = db.child(name).get()
+  download = firebase_db.child(name).get()
   pics = download.val()
-  return pics
+  if(pics == ["x"]):
+    return []
+  else:
+    return pics
 
 def createUser(name):
-  data = ["x"]
-  download = db.child(name).get().val()
-  if(type(download) != list):
-    db.child(name).set(data)
-    print("User added")
-  else:
-    print("User already exists")
-    
+  if(name != ""):
+    data = ["x"]
+    download = firebase_db.child(name).get().val()
+    if(type(download) != list):
+      firebase_db.child(name).set(data)
+      print("User added")
+    else:
+      print("User already exists")

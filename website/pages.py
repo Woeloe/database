@@ -18,6 +18,8 @@ def account(naam):
     residents = [current_user.resident1, current_user.resident2, current_user.resident3]
     picsList = [download(residents[0]), download(residents[1]), download(residents[2])]
 
+    print(residents)
+
     info = zip(residents, picsList)
 
     if(request.form.get("manageResidents") is not None):
@@ -53,10 +55,9 @@ def manageResidents(naam):
         user_updated = Users.query.filter_by(username=naam).update(dict(resident1 = resident1, resident2 = resident2, resident3 = resident3))
         db.session.commit()
 
-        residents = [resident1, resident2, resident3]
-        for resident in residents:
-            if(resident != "" and resident != None):
-                createUser(resident)
+        for resident in [resident1, resident2, resident3]:
+            createUser(resident)
+
 
         return redirect(f"/{naam}")
 

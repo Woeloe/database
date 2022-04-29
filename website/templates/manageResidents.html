@@ -11,7 +11,7 @@
     <form method="POST">
         <button name="save" value="confirm">Opslaan</button>
     {% for resident, i in residents %}
-    {% if resident != None %}
+    {% if resident != None and resident != "" %}
             <p>bewoner{{i}}</p>
             <input type="text" name="resident{{i}}" value="{{resident}}">
     {% else %}

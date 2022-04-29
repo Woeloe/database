@@ -22,6 +22,7 @@
             <button name="manageResidents" value="manage">Beheer bewoners</button>
         </form>
         {%for resident, pics in info %}
+        {% if resident != "" %}
             <p>{{resident}}</p>
             <form method="POST" enctype="multipart/form-data">
                 <input type="file" name="image">
@@ -40,6 +41,7 @@
             {% endfor %}
             </div>
             <br>
+        {% endif %}
         {% endfor %}
     </body>
 </html>

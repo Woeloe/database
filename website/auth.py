@@ -3,6 +3,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from .models import Users
+from .cloudinary_api import *
 
 auth = Blueprint("auth", __name__)
 
@@ -45,6 +46,7 @@ def sign_up():
         resident1 = request.form.get("resident1")
         resident2 = request.form.get("resident2")
         resident3 = request.form.get("resident3")
+        residents = [resident1, resident2, resident3]
 
         usercheck = Users.query.filter_by(email=email).first()
         if usercheck:
@@ -57,6 +59,9 @@ def sign_up():
             flash("Passwords don't match", category="error")
         else:
             #sign up
+            for resident in residents:
+                createUser(resident)
+
             newUser = Users(username=user, email=email, password=generate_password_hash(password1, method="md5"), resident1=resident1, resident2=resident2, resident3=resident3)
             db.session.add(newUser)
             db.session.commit()
